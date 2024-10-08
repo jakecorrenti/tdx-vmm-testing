@@ -67,337 +67,337 @@ impl TdxVm {
         cpuid_entries.resize(256, kvm_bindings::kvm_cpuid_entry2::default());
 
         // patch cpuid
-        // for entry in cpuid_entries.as_mut_slice() {
-        //     if entry.function == 0xD && entry.index == 0 {
-        //         const XFEATURE_MASK_XTILE: u32 = (1 << 17) | (1 << 18);
-        //         if (entry.eax & XFEATURE_MASK_XTILE) != XFEATURE_MASK_XTILE {
-        //             entry.eax &= !XFEATURE_MASK_XTILE;
-        //         }
-        //     }
+        for entry in cpuid_entries.as_mut_slice() {
+            if entry.function == 0xD && entry.index == 0 {
+                const XFEATURE_MASK_XTILE: u32 = (1 << 17) | (1 << 18);
+                if (entry.eax & XFEATURE_MASK_XTILE) != XFEATURE_MASK_XTILE {
+                    entry.eax &= !XFEATURE_MASK_XTILE;
+                }
+            }
 
-        //     if entry.function == 0xD && entry.index == 1 {
-        //         entry.ecx &= !(1 << 15);
-        //         const XFEATURE_MASK_CET: u32 = (1 << 11) | (1 << 12);
-        //         if entry.ecx & XFEATURE_MASK_CET > 0 {
-        //             entry.ecx |= XFEATURE_MASK_CET;
-        //         }
-        //     }
-        // }
+            if entry.function == 0xD && entry.index == 1 {
+                entry.ecx &= !(1 << 15);
+                const XFEATURE_MASK_CET: u32 = (1 << 11) | (1 << 12);
+                if entry.ecx & XFEATURE_MASK_CET > 0 {
+                    entry.ecx |= XFEATURE_MASK_CET;
+                }
+            }
+        }
 
-        cpuid_entries[0].eax = 31;
-        cpuid_entries[0].ebx = 1970169159;
-        cpuid_entries[0].ecx = 1818588270;
-        cpuid_entries[0].edx = 1231384169;
-
-        cpuid_entries[1].function = 1;
-        cpuid_entries[1].eax = 788210;
-        cpuid_entries[1].ebx = 2048;
-        cpuid_entries[1].ecx = 4160369175;
-        cpuid_entries[1].edx = 799800319;
-
-        cpuid_entries[2].function = 2;
-        cpuid_entries[2].index = 0;
-        cpuid_entries[2].flags = 6;
-        cpuid_entries[2].eax = 1;
-        cpuid_entries[2].ebx = 0;
-        cpuid_entries[2].ecx = 77;
-        cpuid_entries[2].edx = 2895997;
-
-        cpuid_entries[3].function = 4;
-        cpuid_entries[3].index = 0;
-        cpuid_entries[3].flags = 1;
-        cpuid_entries[3].eax = 289;
-        cpuid_entries[3].ebx = 29360191;
-        cpuid_entries[3].ecx = 63;
-        cpuid_entries[3].edx = 1;
-
-        cpuid_entries[4].function = 4;
-        cpuid_entries[4].index = 1;
-        cpuid_entries[4].flags = 1;
-        cpuid_entries[4].eax = 290;
-        cpuid_entries[4].ebx = 29360191;
-        cpuid_entries[4].ecx = 63;
-        cpuid_entries[4].edx = 1;
-
-        cpuid_entries[5].function = 4;
-        cpuid_entries[5].index = 2;
-        cpuid_entries[5].flags = 1;
-        cpuid_entries[5].eax = 323;
-        cpuid_entries[5].ebx = 62914623;
-        cpuid_entries[5].ecx = 4095;
-        cpuid_entries[5].edx = 1;
-
-        cpuid_entries[6].function = 4;
-        cpuid_entries[6].index = 3;
-        cpuid_entries[6].flags = 1;
-        cpuid_entries[6].eax = 355;
-        cpuid_entries[6].ebx = 62914623;
-        cpuid_entries[6].ecx = 16383;
-        cpuid_entries[6].edx = 6;
-
-        cpuid_entries[7].function = 4;
-        cpuid_entries[7].index = 4;
-        cpuid_entries[7].flags = 1;
-        cpuid_entries[7].eax = 0;
-        cpuid_entries[7].ebx = 0;
-        cpuid_entries[7].ecx = 0;
-        cpuid_entries[7].edx = 0;
-
-        cpuid_entries[8].function = 5;
-        cpuid_entries[8].index = 0;
-        cpuid_entries[8].flags = 0;
-        cpuid_entries[8].eax = 0;
-        cpuid_entries[8].ebx = 0;
-        cpuid_entries[8].ecx = 3;
-        cpuid_entries[8].edx = 0;
-
-        cpuid_entries[9].function = 6;
-        cpuid_entries[9].index = 0;
-        cpuid_entries[9].flags = 0;
-        cpuid_entries[9].eax = 4;
-        cpuid_entries[9].ebx = 0;
-        cpuid_entries[9].ecx = 0;
-        cpuid_entries[9].edx = 0;
-
-        cpuid_entries[10].function = 7;
-        cpuid_entries[10].index = 0;
-        cpuid_entries[10].flags = 1;
-        cpuid_entries[10].eax = 1;
-        cpuid_entries[10].ebx = 4055830457;
-        cpuid_entries[10].ecx = 457269070;
-        cpuid_entries[10].edx = 4291380240;
-
-        cpuid_entries[11].function = 7;
-        cpuid_entries[11].index = 1;
-        cpuid_entries[11].flags = 1;
-        cpuid_entries[11].eax = 7216;
-        cpuid_entries[11].ebx = 0;
-        cpuid_entries[11].ecx = 0;
-        cpuid_entries[11].edx = 0;
-
-        cpuid_entries[12].function = 11;
-        cpuid_entries[12].index = 0;
-        cpuid_entries[12].flags = 1;
-        cpuid_entries[12].eax = 0;
-        cpuid_entries[12].ebx = 1;
-        cpuid_entries[12].ecx = 256;
-        cpuid_entries[12].edx = 0;
-
-        cpuid_entries[13].function = 11;
-        cpuid_entries[13].index = 1;
-        cpuid_entries[13].flags = 1;
-        cpuid_entries[13].eax = 0;
-        cpuid_entries[13].ebx = 1;
-        cpuid_entries[13].ecx = 513;
-        cpuid_entries[13].edx = 0;
-
-        cpuid_entries[14].function = 11;
-        cpuid_entries[14].index = 2;
-        cpuid_entries[14].flags = 1;
-        cpuid_entries[14].eax = 0;
-        cpuid_entries[14].ebx = 0;
-        cpuid_entries[14].ecx = 2;
-        cpuid_entries[14].edx = 0;
-
-        cpuid_entries[15].function = 13;
-        cpuid_entries[15].index = 0;
-        cpuid_entries[15].flags = 1;
-        cpuid_entries[15].eax = 393959;
-        cpuid_entries[15].ebx = 11008;
-        cpuid_entries[15].ecx = 11008;
-        cpuid_entries[15].edx = 0;
-
-        cpuid_entries[16].function = 13;
-        cpuid_entries[16].index = 1;
-        cpuid_entries[16].flags = 1;
-        cpuid_entries[16].eax = 31;
-        cpuid_entries[16].ebx = 11504;
-        cpuid_entries[16].ecx = 0;
-        cpuid_entries[16].edx = 0;
-
-        cpuid_entries[17].function = 13;
-        cpuid_entries[17].index = 2;
-        cpuid_entries[17].flags = 1;
-        cpuid_entries[17].eax = 256;
-        cpuid_entries[17].ebx = 576;
-        cpuid_entries[17].ecx = 0;
-        cpuid_entries[17].edx = 0;
-
-        cpuid_entries[18].function = 13;
-        cpuid_entries[18].index = 5;
-        cpuid_entries[18].flags = 1;
-        cpuid_entries[18].eax = 64;
-        cpuid_entries[18].ebx = 1088;
-        cpuid_entries[18].ecx = 0;
-        cpuid_entries[18].edx = 0;
-
-        cpuid_entries[19].function = 13;
-        cpuid_entries[19].index = 6;
-        cpuid_entries[19].flags = 1;
-        cpuid_entries[19].eax = 512;
-        cpuid_entries[19].ebx = 1152;
-        cpuid_entries[19].ecx = 0;
-        cpuid_entries[19].edx = 0;
-
-        cpuid_entries[20].function = 13;
-        cpuid_entries[20].index = 7;
-        cpuid_entries[20].flags = 1;
-        cpuid_entries[20].eax = 1024;
-        cpuid_entries[20].ebx = 1664;
-        cpuid_entries[20].ecx = 0;
-        cpuid_entries[20].edx = 0;
-
-        cpuid_entries[21].function = 13;
-        cpuid_entries[21].index = 9;
-        cpuid_entries[21].flags = 1;
-        cpuid_entries[21].eax = 8;
-        cpuid_entries[21].ebx = 2688;
-        cpuid_entries[21].ecx = 0;
-        cpuid_entries[21].edx = 0;
-
-        cpuid_entries[22].function = 13;
-        cpuid_entries[22].index = 15;
-        cpuid_entries[22].flags = 1;
-        cpuid_entries[22].eax = 808;
-        cpuid_entries[22].ebx = 0;
-        cpuid_entries[22].ecx = 1;
-        cpuid_entries[22].edx = 0;
-
-        cpuid_entries[23].function = 13;
-        cpuid_entries[23].index = 17;
-        cpuid_entries[23].flags = 1;
-        cpuid_entries[23].eax = 64;
-        cpuid_entries[23].ebx = 2752;
-        cpuid_entries[23].ecx = 2;
-        cpuid_entries[23].edx = 0;
-
-        cpuid_entries[24].function = 13;
-        cpuid_entries[24].index = 18;
-        cpuid_entries[24].flags = 1;
-        cpuid_entries[24].eax = 8192;
-        cpuid_entries[24].ebx = 2816;
-        cpuid_entries[24].ecx = 6;
-        cpuid_entries[24].edx = 0;
-
-        cpuid_entries[25].function = 13;
-        cpuid_entries[25].index = 63;
-        cpuid_entries[25].flags = 1;
-        cpuid_entries[25].eax = 0;
-        cpuid_entries[25].ebx = 0;
-        cpuid_entries[25].ecx = 0;
-        cpuid_entries[25].edx = 0;
-
-        cpuid_entries[26].function = 18;
-        cpuid_entries[26].index = 0;
-        cpuid_entries[26].flags = 1;
-        cpuid_entries[26].eax = 0;
-        cpuid_entries[26].ebx = 0;
-        cpuid_entries[26].ecx = 0;
-        cpuid_entries[26].edx = 0;
-
-        cpuid_entries[27].function = 18;
-        cpuid_entries[27].index = 1;
-        cpuid_entries[27].flags = 1;
-        cpuid_entries[27].eax = 0;
-        cpuid_entries[27].ebx = 0;
-        cpuid_entries[27].ecx = 0;
-        cpuid_entries[27].edx = 0;
-
-        cpuid_entries[28].function = 18;
-        cpuid_entries[28].index = 2;
-        cpuid_entries[28].flags = 1;
-        cpuid_entries[28].eax = 0;
-        cpuid_entries[28].ebx = 0;
-        cpuid_entries[28].ecx = 0;
-        cpuid_entries[28].edx = 0;
-
-        cpuid_entries[29].function = 20;
-        cpuid_entries[29].index = 0;
-        cpuid_entries[29].flags = 1;
-        cpuid_entries[29].eax = 0;
-        cpuid_entries[29].ebx = 0;
-        cpuid_entries[29].ecx = 0;
-        cpuid_entries[29].edx = 0;
-
-        cpuid_entries[30].function = 29;
-        cpuid_entries[30].index = 0;
-        cpuid_entries[30].flags = 1;
-        cpuid_entries[30].eax = 1;
-        cpuid_entries[30].ebx = 0;
-        cpuid_entries[30].ecx = 0;
-        cpuid_entries[30].edx = 0;
-
-        cpuid_entries[31].function = 29;
-        cpuid_entries[31].index = 1;
-        cpuid_entries[31].flags = 1;
-        cpuid_entries[31].eax = 67117056;
-        cpuid_entries[31].ebx = 524352;
-        cpuid_entries[31].ecx = 16;
-        cpuid_entries[31].edx = 0;
-
-        cpuid_entries[32].function = 30;
-        cpuid_entries[32].index = 0;
-        cpuid_entries[32].flags = 1;
-        cpuid_entries[32].eax = 0;
-        cpuid_entries[32].ebx = 16400;
-        cpuid_entries[32].ecx = 0;
-        cpuid_entries[32].edx = 0;
-
-        cpuid_entries[33].function = 2147483648;
-        cpuid_entries[33].index = 0;
-        cpuid_entries[33].flags = 0;
-        cpuid_entries[33].eax = 2147483656;
-        cpuid_entries[33].ebx = 1970169159;
-        cpuid_entries[33].ecx = 1818588270;
-        cpuid_entries[33].edx = 1231384169;
-
-        cpuid_entries[34].function = 2147483649;
-        cpuid_entries[34].index = 0;
-        cpuid_entries[34].flags = 0;
-        cpuid_entries[34].eax = 788210;
-        cpuid_entries[34].ebx = 0;
-        cpuid_entries[34].ecx = 289;
-        cpuid_entries[34].edx = 739248128;
-
-        cpuid_entries[35].function = 2147483650;
-        cpuid_entries[35].index = 0;
-        cpuid_entries[35].flags = 0;
-        cpuid_entries[35].eax = 1163152969;
-        cpuid_entries[35].ebx = 693250124;
-        cpuid_entries[35].ecx = 1329944608;
-        cpuid_entries[35].edx = 693250126;
-
-        cpuid_entries[36].function = 2147483651;
-        cpuid_entries[36].index = 0;
-        cpuid_entries[36].flags = 0;
-        cpuid_entries[36].eax = 1280263968;
-        cpuid_entries[36].ebx = 892674116;
-        cpuid_entries[36].ecx = 5583409;
-        cpuid_entries[36].edx = 0;
-
-        cpuid_entries[37].function = 2147483653;
-        cpuid_entries[37].index = 0;
-        cpuid_entries[37].flags = 0;
-        cpuid_entries[37].eax = 33489407;
-        cpuid_entries[37].ebx = 33489407;
-        cpuid_entries[37].ecx = 1073873216;
-        cpuid_entries[37].edx = 1073873216;
-
-        cpuid_entries[38].function = 2147483654;
-        cpuid_entries[38].index = 0;
-        cpuid_entries[38].flags = 0;
-        cpuid_entries[38].eax = 0;
-        cpuid_entries[38].ebx = 1107313152;
-        cpuid_entries[38].ecx = 33587520;
-        cpuid_entries[38].edx = 8421696;
-
-        cpuid_entries[39].function = 2147483656;
-        cpuid_entries[39].index = 0;
-        cpuid_entries[39].flags = 0;
-        cpuid_entries[39].eax = 14640;
-        cpuid_entries[39].ebx = 512;
-        cpuid_entries[39].ecx = 0;
-        cpuid_entries[39].edx = 0;
+        // cpuid_entries[0].eax = 31;
+        // cpuid_entries[0].ebx = 1970169159;
+        // cpuid_entries[0].ecx = 1818588270;
+        // cpuid_entries[0].edx = 1231384169;
+        //
+        // cpuid_entries[1].function = 1;
+        // cpuid_entries[1].eax = 788210;
+        // cpuid_entries[1].ebx = 2048;
+        // cpuid_entries[1].ecx = 4160369175;
+        // cpuid_entries[1].edx = 799800319;
+        //
+        // cpuid_entries[2].function = 2;
+        // cpuid_entries[2].index = 0;
+        // cpuid_entries[2].flags = 6;
+        // cpuid_entries[2].eax = 1;
+        // cpuid_entries[2].ebx = 0;
+        // cpuid_entries[2].ecx = 77;
+        // cpuid_entries[2].edx = 2895997;
+        //
+        // cpuid_entries[3].function = 4;
+        // cpuid_entries[3].index = 0;
+        // cpuid_entries[3].flags = 1;
+        // cpuid_entries[3].eax = 289;
+        // cpuid_entries[3].ebx = 29360191;
+        // cpuid_entries[3].ecx = 63;
+        // cpuid_entries[3].edx = 1;
+        //
+        // cpuid_entries[4].function = 4;
+        // cpuid_entries[4].index = 1;
+        // cpuid_entries[4].flags = 1;
+        // cpuid_entries[4].eax = 290;
+        // cpuid_entries[4].ebx = 29360191;
+        // cpuid_entries[4].ecx = 63;
+        // cpuid_entries[4].edx = 1;
+        //
+        // cpuid_entries[5].function = 4;
+        // cpuid_entries[5].index = 2;
+        // cpuid_entries[5].flags = 1;
+        // cpuid_entries[5].eax = 323;
+        // cpuid_entries[5].ebx = 62914623;
+        // cpuid_entries[5].ecx = 4095;
+        // cpuid_entries[5].edx = 1;
+        //
+        // cpuid_entries[6].function = 4;
+        // cpuid_entries[6].index = 3;
+        // cpuid_entries[6].flags = 1;
+        // cpuid_entries[6].eax = 355;
+        // cpuid_entries[6].ebx = 62914623;
+        // cpuid_entries[6].ecx = 16383;
+        // cpuid_entries[6].edx = 6;
+        //
+        // cpuid_entries[7].function = 4;
+        // cpuid_entries[7].index = 4;
+        // cpuid_entries[7].flags = 1;
+        // cpuid_entries[7].eax = 0;
+        // cpuid_entries[7].ebx = 0;
+        // cpuid_entries[7].ecx = 0;
+        // cpuid_entries[7].edx = 0;
+        //
+        // cpuid_entries[8].function = 5;
+        // cpuid_entries[8].index = 0;
+        // cpuid_entries[8].flags = 0;
+        // cpuid_entries[8].eax = 0;
+        // cpuid_entries[8].ebx = 0;
+        // cpuid_entries[8].ecx = 3;
+        // cpuid_entries[8].edx = 0;
+        //
+        // cpuid_entries[9].function = 6;
+        // cpuid_entries[9].index = 0;
+        // cpuid_entries[9].flags = 0;
+        // cpuid_entries[9].eax = 4;
+        // cpuid_entries[9].ebx = 0;
+        // cpuid_entries[9].ecx = 0;
+        // cpuid_entries[9].edx = 0;
+        //
+        // cpuid_entries[10].function = 7;
+        // cpuid_entries[10].index = 0;
+        // cpuid_entries[10].flags = 1;
+        // cpuid_entries[10].eax = 1;
+        // cpuid_entries[10].ebx = 4055830457;
+        // cpuid_entries[10].ecx = 457269070;
+        // cpuid_entries[10].edx = 4291380240;
+        //
+        // cpuid_entries[11].function = 7;
+        // cpuid_entries[11].index = 1;
+        // cpuid_entries[11].flags = 1;
+        // cpuid_entries[11].eax = 7216;
+        // cpuid_entries[11].ebx = 0;
+        // cpuid_entries[11].ecx = 0;
+        // cpuid_entries[11].edx = 0;
+        //
+        // cpuid_entries[12].function = 11;
+        // cpuid_entries[12].index = 0;
+        // cpuid_entries[12].flags = 1;
+        // cpuid_entries[12].eax = 0;
+        // cpuid_entries[12].ebx = 1;
+        // cpuid_entries[12].ecx = 256;
+        // cpuid_entries[12].edx = 0;
+        //
+        // cpuid_entries[13].function = 11;
+        // cpuid_entries[13].index = 1;
+        // cpuid_entries[13].flags = 1;
+        // cpuid_entries[13].eax = 0;
+        // cpuid_entries[13].ebx = 1;
+        // cpuid_entries[13].ecx = 513;
+        // cpuid_entries[13].edx = 0;
+        //
+        // cpuid_entries[14].function = 11;
+        // cpuid_entries[14].index = 2;
+        // cpuid_entries[14].flags = 1;
+        // cpuid_entries[14].eax = 0;
+        // cpuid_entries[14].ebx = 0;
+        // cpuid_entries[14].ecx = 2;
+        // cpuid_entries[14].edx = 0;
+        //
+        // cpuid_entries[15].function = 13;
+        // cpuid_entries[15].index = 0;
+        // cpuid_entries[15].flags = 1;
+        // cpuid_entries[15].eax = 393959;
+        // cpuid_entries[15].ebx = 11008;
+        // cpuid_entries[15].ecx = 11008;
+        // cpuid_entries[15].edx = 0;
+        //
+        // cpuid_entries[16].function = 13;
+        // cpuid_entries[16].index = 1;
+        // cpuid_entries[16].flags = 1;
+        // cpuid_entries[16].eax = 31;
+        // cpuid_entries[16].ebx = 11504;
+        // cpuid_entries[16].ecx = 0;
+        // cpuid_entries[16].edx = 0;
+        //
+        // cpuid_entries[17].function = 13;
+        // cpuid_entries[17].index = 2;
+        // cpuid_entries[17].flags = 1;
+        // cpuid_entries[17].eax = 256;
+        // cpuid_entries[17].ebx = 576;
+        // cpuid_entries[17].ecx = 0;
+        // cpuid_entries[17].edx = 0;
+        //
+        // cpuid_entries[18].function = 13;
+        // cpuid_entries[18].index = 5;
+        // cpuid_entries[18].flags = 1;
+        // cpuid_entries[18].eax = 64;
+        // cpuid_entries[18].ebx = 1088;
+        // cpuid_entries[18].ecx = 0;
+        // cpuid_entries[18].edx = 0;
+        //
+        // cpuid_entries[19].function = 13;
+        // cpuid_entries[19].index = 6;
+        // cpuid_entries[19].flags = 1;
+        // cpuid_entries[19].eax = 512;
+        // cpuid_entries[19].ebx = 1152;
+        // cpuid_entries[19].ecx = 0;
+        // cpuid_entries[19].edx = 0;
+        //
+        // cpuid_entries[20].function = 13;
+        // cpuid_entries[20].index = 7;
+        // cpuid_entries[20].flags = 1;
+        // cpuid_entries[20].eax = 1024;
+        // cpuid_entries[20].ebx = 1664;
+        // cpuid_entries[20].ecx = 0;
+        // cpuid_entries[20].edx = 0;
+        //
+        // cpuid_entries[21].function = 13;
+        // cpuid_entries[21].index = 9;
+        // cpuid_entries[21].flags = 1;
+        // cpuid_entries[21].eax = 8;
+        // cpuid_entries[21].ebx = 2688;
+        // cpuid_entries[21].ecx = 0;
+        // cpuid_entries[21].edx = 0;
+        //
+        // cpuid_entries[22].function = 13;
+        // cpuid_entries[22].index = 15;
+        // cpuid_entries[22].flags = 1;
+        // cpuid_entries[22].eax = 808;
+        // cpuid_entries[22].ebx = 0;
+        // cpuid_entries[22].ecx = 1;
+        // cpuid_entries[22].edx = 0;
+        //
+        // cpuid_entries[23].function = 13;
+        // cpuid_entries[23].index = 17;
+        // cpuid_entries[23].flags = 1;
+        // cpuid_entries[23].eax = 64;
+        // cpuid_entries[23].ebx = 2752;
+        // cpuid_entries[23].ecx = 2;
+        // cpuid_entries[23].edx = 0;
+        //
+        // cpuid_entries[24].function = 13;
+        // cpuid_entries[24].index = 18;
+        // cpuid_entries[24].flags = 1;
+        // cpuid_entries[24].eax = 8192;
+        // cpuid_entries[24].ebx = 2816;
+        // cpuid_entries[24].ecx = 6;
+        // cpuid_entries[24].edx = 0;
+        //
+        // cpuid_entries[25].function = 13;
+        // cpuid_entries[25].index = 63;
+        // cpuid_entries[25].flags = 1;
+        // cpuid_entries[25].eax = 0;
+        // cpuid_entries[25].ebx = 0;
+        // cpuid_entries[25].ecx = 0;
+        // cpuid_entries[25].edx = 0;
+        //
+        // cpuid_entries[26].function = 18;
+        // cpuid_entries[26].index = 0;
+        // cpuid_entries[26].flags = 1;
+        // cpuid_entries[26].eax = 0;
+        // cpuid_entries[26].ebx = 0;
+        // cpuid_entries[26].ecx = 0;
+        // cpuid_entries[26].edx = 0;
+        //
+        // cpuid_entries[27].function = 18;
+        // cpuid_entries[27].index = 1;
+        // cpuid_entries[27].flags = 1;
+        // cpuid_entries[27].eax = 0;
+        // cpuid_entries[27].ebx = 0;
+        // cpuid_entries[27].ecx = 0;
+        // cpuid_entries[27].edx = 0;
+        //
+        // cpuid_entries[28].function = 18;
+        // cpuid_entries[28].index = 2;
+        // cpuid_entries[28].flags = 1;
+        // cpuid_entries[28].eax = 0;
+        // cpuid_entries[28].ebx = 0;
+        // cpuid_entries[28].ecx = 0;
+        // cpuid_entries[28].edx = 0;
+        //
+        // cpuid_entries[29].function = 20;
+        // cpuid_entries[29].index = 0;
+        // cpuid_entries[29].flags = 1;
+        // cpuid_entries[29].eax = 0;
+        // cpuid_entries[29].ebx = 0;
+        // cpuid_entries[29].ecx = 0;
+        // cpuid_entries[29].edx = 0;
+        //
+        // cpuid_entries[30].function = 29;
+        // cpuid_entries[30].index = 0;
+        // cpuid_entries[30].flags = 1;
+        // cpuid_entries[30].eax = 1;
+        // cpuid_entries[30].ebx = 0;
+        // cpuid_entries[30].ecx = 0;
+        // cpuid_entries[30].edx = 0;
+        //
+        // cpuid_entries[31].function = 29;
+        // cpuid_entries[31].index = 1;
+        // cpuid_entries[31].flags = 1;
+        // cpuid_entries[31].eax = 67117056;
+        // cpuid_entries[31].ebx = 524352;
+        // cpuid_entries[31].ecx = 16;
+        // cpuid_entries[31].edx = 0;
+        //
+        // cpuid_entries[32].function = 30;
+        // cpuid_entries[32].index = 0;
+        // cpuid_entries[32].flags = 1;
+        // cpuid_entries[32].eax = 0;
+        // cpuid_entries[32].ebx = 16400;
+        // cpuid_entries[32].ecx = 0;
+        // cpuid_entries[32].edx = 0;
+        //
+        // cpuid_entries[33].function = 2147483648;
+        // cpuid_entries[33].index = 0;
+        // cpuid_entries[33].flags = 0;
+        // cpuid_entries[33].eax = 2147483656;
+        // cpuid_entries[33].ebx = 1970169159;
+        // cpuid_entries[33].ecx = 1818588270;
+        // cpuid_entries[33].edx = 1231384169;
+        //
+        // cpuid_entries[34].function = 2147483649;
+        // cpuid_entries[34].index = 0;
+        // cpuid_entries[34].flags = 0;
+        // cpuid_entries[34].eax = 788210;
+        // cpuid_entries[34].ebx = 0;
+        // cpuid_entries[34].ecx = 289;
+        // cpuid_entries[34].edx = 739248128;
+        //
+        // cpuid_entries[35].function = 2147483650;
+        // cpuid_entries[35].index = 0;
+        // cpuid_entries[35].flags = 0;
+        // cpuid_entries[35].eax = 1163152969;
+        // cpuid_entries[35].ebx = 693250124;
+        // cpuid_entries[35].ecx = 1329944608;
+        // cpuid_entries[35].edx = 693250126;
+        //
+        // cpuid_entries[36].function = 2147483651;
+        // cpuid_entries[36].index = 0;
+        // cpuid_entries[36].flags = 0;
+        // cpuid_entries[36].eax = 1280263968;
+        // cpuid_entries[36].ebx = 892674116;
+        // cpuid_entries[36].ecx = 5583409;
+        // cpuid_entries[36].edx = 0;
+        //
+        // cpuid_entries[37].function = 2147483653;
+        // cpuid_entries[37].index = 0;
+        // cpuid_entries[37].flags = 0;
+        // cpuid_entries[37].eax = 33489407;
+        // cpuid_entries[37].ebx = 33489407;
+        // cpuid_entries[37].ecx = 1073873216;
+        // cpuid_entries[37].edx = 1073873216;
+        //
+        // cpuid_entries[38].function = 2147483654;
+        // cpuid_entries[38].index = 0;
+        // cpuid_entries[38].flags = 0;
+        // cpuid_entries[38].eax = 0;
+        // cpuid_entries[38].ebx = 1107313152;
+        // cpuid_entries[38].ecx = 33587520;
+        // cpuid_entries[38].edx = 8421696;
+        //
+        // cpuid_entries[39].function = 2147483656;
+        // cpuid_entries[39].index = 0;
+        // cpuid_entries[39].flags = 0;
+        // cpuid_entries[39].eax = 14640;
+        // cpuid_entries[39].ebx = 512;
+        // cpuid_entries[39].ecx = 0;
+        // cpuid_entries[39].edx = 0;
 
         println!("cpuid entries: {:#?}", &cpuid_entries[..40]);
         // println!("this is going to trigger the invalid operand to go from 41 to 40");
