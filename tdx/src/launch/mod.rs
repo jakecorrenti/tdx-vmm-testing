@@ -399,10 +399,18 @@ impl TdxVm {
         // cpuid_entries[39].ecx = 0;
         // cpuid_entries[39].edx = 0;
 
-        println!("cpuid entries: {:#?}", &cpuid_entries[..40]);
+        // println!("cpuid entries: {:#?}", &cpuid_entries[..40]);
         // println!("this is going to trigger the invalid operand to go from 41 to 40");
 
-        let mut cmd = Cmd::from(&InitVm::new(&cpuid_entries));
+        for i in 0..40 {
+            let e = cpuid_entries[i];
+            println!("cpuid_entry2: {{\n\tfunction: 0x{:x},\n\tindex: 0x{:x},\n\tflags: 0x{:x},\n\teax: 0x{:x},\n\tebx: 0x{:x},\n\tecx: 0x{:x},\n\tedx: 0x{:x},\n}}", e.function, e.index, e.flags, e.eax, e.ebx, e.ecx, e.edx);
+        }
+
+        // let mut cmd = Cmd::from(&InitVm::new(&cpuid_entries));
+        let i = InitVm::new(&cpuid_entries);
+        println!("init_vm: {:#?}", i);
+        let mut cmd = Cmd::from(&i);
         unsafe {
             let res = fd.encrypt_op(&mut cmd);
             println!("cmd.error: {:x}", cmd.error);

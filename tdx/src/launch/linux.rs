@@ -205,7 +205,8 @@ pub struct InitVm {
 impl InitVm {
     pub fn new(cpuid_entries: &Vec<kvm_bindings::kvm_cpuid_entry2>) -> Self {
         Self {
-            cpuid_nent: cpuid_entries.len() as u32,
+            // could this have been it??? not doing `.as_slice()`?
+            cpuid_nent: cpuid_entries.as_slice().len() as u32,
             cpuid_entries: cpuid_entries.as_slice().try_into().unwrap(),
             ..Default::default()
         }
